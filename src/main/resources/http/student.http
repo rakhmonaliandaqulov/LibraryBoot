@@ -1,0 +1,35 @@
+### Student list
+GET localhost:8080/student/list
+
+### Student getById
+GET localhost:8080/student/get/8af79c50-28b8-46e3-a0ed-fc893f8617bf
+
+### Student create
+POST localhost:8080/student/create/all
+Content-Type: application/json
+
+[
+  {
+   "name": "Eshmat",
+   "surname": "Eshmatov"
+  },
+  {
+   "name": "Valish",
+   "surname": "Valishev"
+  },
+  {
+   "name": "fdsfdsv",
+   "surname": "sdfdsfdsf"
+  }
+]
+### Student update
+PUT localhost:8080/student/update/155c553d-5a6b-4295-a228-22af4bce9809
+Content-Type: application/json
+
+{
+  "name": "Qo'yjon",
+  "surname": "Qo'ymurodov"
+}
+### Srudent delete
+DELETE localhost:8080/student/delete/5a987fad-1fc5-4d9c-b901-187c1a2851a6
+Content-Type: application/json
