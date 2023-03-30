@@ -36,8 +36,8 @@ public class StudentBookService {
         LocalDateTime localDateTime = LocalDateTime.now();
         studentBook.setReturnedDate(localDateTime);
         studentBook.setDuration(duration);
-        studentBook.setBookId(book);
-        studentBook.setStudentId(student);
+        studentBook.setBookId(book.getId());
+        studentBook.setStudentId(student.getId());
 
         studentsBookRepository.save(studentBook);
         book.setAmount(book.getAmount() - 1);
@@ -46,7 +46,7 @@ public class StudentBookService {
         System.out.println("You taken book.");
     }
 
-    public void userTakenBook() {
+  /*  public void userTakenBook() {
         List<StudentsBookInfo> studentsBookInfoListList = studentsBookRepository.userTakenList();
         if (studentsBookInfoListList == null) {
             System.out.println("No books yet.");
@@ -101,5 +101,5 @@ public class StudentBookService {
             System.out.println("Not fount book.");
         }
         studentsBookRepository.returnBook(bookId);
-    }
+    }*/
 }

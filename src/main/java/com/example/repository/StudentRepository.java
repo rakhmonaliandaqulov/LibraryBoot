@@ -1,7 +1,14 @@
 package com.example.repository;
 
-import com.example.dto.StudentDTO;
+import com.example.entity.BookEntity;
+import com.example.entity.StudentEntity;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -36,102 +43,35 @@ public class StudentRepository {
         }
         return 0;
     }*/
-    public int save(StudentDTO student) {
-        String sql = "insert into student (name,surname, phone, birth_date, status) values ('%s','%s','%s','%s','%s')";
-        sql = String.format(sql, student.getName(), student.getSurname(), student.getPhone(),
-                student.getBirthDate(), student.getStatus());
-        int n = jdbcTemplate.update(sql);
-        return n;
+    public int save(StudentEntity student) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(student);
+        transaction.commit();
+
+        session.close();
+        sessionFactory.close();
+        return 1;
     }
-    /* public Student geStudentByPhone(String phone) {
-         Connection connection = null;
-         try {
-             connection = Database.getConnection();
-             Statement statement = connection.createStatement();
-             String sql = String.format("Select * from student where phone= '%s';", phone);
-             ResultSet resultSet = statement.executeQuery(sql);
+    public StudentEntity getStudentByPhone(String phone) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        StudentEntity studentEntity = session.createQuery("from StudentEntity where phone = " + phone + "", StudentEntity.class).getSingleResult();
+        transaction.commit();
 
-             while (resultSet.next()) {
-                 Student student = new Student();
-                 student.setId(resultSet.getInt("id"));
-                 student.setName(resultSet.getString("name"));
-                 student.setSurname(resultSet.getString("surname"));
-                 student.setPhone(resultSet.getString("phone"));
-                 student.setBirthDate(resultSet.getDate("birth_date").toLocalDate());
-                 return student;
-             }
-
-         } catch (SQLException e) {
-             e.printStackTrace();
-             System.exit(-1);
-         } finally {
-
-             try {
-                 if (connection != null) {
-                     connection.close();
-                 }
-
-             } catch (SQLException e) {
-                 e.printStackTrace();
-                 System.exit(-1);
-             }
-
-         }
-         return null;
-     }*/
-   /*public Student  getStudentByPhone(String phone) {
-       String sql = "SELECT * FROM student where phone =" + phone;
-       Student student = (Student) jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Student.class));
-       return student;
-   }*/
-  /* public Student getStudentByPhone(String phone) {
-       Connection connection = null;
-       try {
-           connection = Database.getConnection();
-           Statement statement = connection.createStatement();
-           String sql = String.format("Select  * from student where phone = '%s';", phone);
-           ResultSet resultSet = statement.executeQuery(sql);
-
-           while (resultSet.next()) {
-               Student profile = new Student();
-               profile.setId(resultSet.getInt("id"));
-               profile.setName(resultSet.getString("name"));
-               profile.setSurname(resultSet.getString("surname"));
-               profile.setPhone(resultSet.getString("phone"));
-               profile.setStatus(GeneralStatus.valueOf(resultSet.getString("status")));
-               return profile;
-           }
-       } catch (SQLException e) {
-           e.printStackTrace();
-           System.exit(-1);
-       } finally {
-           try {
-               if (connection != null) {
-                   connection.close();
-               }
-           } catch (SQLException e) {
-               e.printStackTrace();
-               System.exit(-1);
-           }
-       }
-       return null;
-   }*/
-    public StudentDTO getStudentByPhone(String phone) {
-        String sql = String.format("Select  * from student where phone = '%s';", phone);
-
-        List<StudentDTO> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Student.class));
-        if (list.size() > 0) {
-            return list.get(0);
-        }
-        return null;
+        session.close();
+        sessionFactory.close();
+        return studentEntity;
     }
-    public StudentDTO getStudentById(Integer id) {
-        String sql = "SELECT * FROM student Where id =" + id;
-        List<StudentDTO> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Student.class));
-        if (list.size() > 0) {
-            return list.get(0);
-        }
-        return null;
+    public StudentEntity getStudentById(Integer id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        StudentEntity studentEntity = session.createQuery("from StudentEntity where id = " + id + "", StudentEntity.class).getSingleResult();
+        transaction.commit();
+
+        session.close();
+        sessionFactory.close();
+        return studentEntity;
     }
     /* public List<Student> getStudentList() {
          try (Connection connection = Database.getConnection()) {
@@ -155,23 +95,25 @@ public class StudentRepository {
          }
          return null;
      }*/
-    public List<StudentDTO> studentList() {
-        String sql = "select * from student";
-        List<StudentDTO> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Student.class));
-        return list;
+    public List<StudentEntity> studentList() {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<StudentEntity> studentEntityList = session.createQuery("from StudentEntity", StudentEntity.class).getResultList();
+        transaction.commit();
+
+        session.close();
+        sessionFactory.close();
+        return studentEntityList;
     }
-
     public int deleteStudent(Integer id) {
-        try (Connection connection = Database.getConnection()) {
-            String sql = String.format("delete from student where id = '%s'", id);
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<StudentEntity> studentEntityList = session.createQuery("delete from  StudentEntity where id = " + id + "", StudentEntity.class).getResultList();
+        transaction.commit();
 
-            Statement statement = connection.createStatement();
-            return statement.executeUpdate(sql);
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-        return 0;
+        session.close();
+        sessionFactory.close();
+        return 1;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.StudentDTO;
+import com.example.entity.StudentEntity;
 import com.example.enums.GeneralStatus;
 import com.example.repository.StudentBookRepository;
 import com.example.repository.StudentRepository;
@@ -17,12 +18,12 @@ public class StudentService {
     @Autowired
     private StudentBookRepository studentBookRepository;
     public void addStudent(String name, String surname, String phone, String birthDate) {
-        StudentDTO exists = studentRepository.getStudentByPhone(phone);
+        StudentEntity exists = studentRepository.getStudentByPhone(phone);
         if (exists != null) {
             System.out.println("\n Student phone exists.");
         }
 
-        StudentDTO student = new StudentDTO();
+        StudentEntity student = new StudentEntity();
         student.setName(name);
         student.setSurname(surname);
         student.setPhone(phone);
@@ -38,19 +39,18 @@ public class StudentService {
             System.out.println("\n ERROR");
         }
     }
-
     public void studentList() {
-        List<StudentDTO> studentList = studentRepository.studentList();
+        List<StudentEntity> studentList = studentRepository.studentList();
         if (studentList == null) {
             System.out.println("\n No student yet");
         }
-        for (StudentDTO student : studentList) {
+        for (StudentEntity student : studentList) {
             System.out.println(student);
         }
     }
 
     public void deleteStudent(Integer id) {
-        StudentDTO exists = studentRepository.getStudentById(id);
+        StudentEntity exists = studentRepository.getStudentById(id);
         if (exists == null) {
             System.out.println("\n Not found student.");
         }

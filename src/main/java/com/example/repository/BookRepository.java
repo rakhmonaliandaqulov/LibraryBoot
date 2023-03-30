@@ -16,53 +16,23 @@ public class BookRepository {
     @Autowired
     private SessionFactory sessionFactory;
     public int save(BookEntity book) {
-        StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-        SessionFactory factory = meta.getSessionFactoryBuilder().build();
-
-        Session session = factory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(book);
         transaction.commit();
 
         session.close();
-        factory.close();
+        sessionFactory.close();
         return 1;
     }
-    /*public int save(Book book) {
-        Connection connection = Database.getConnection();
-        try {
-            String sql = "insert into book (title, author, pulish_year, amount) " + " values ('%s','%s','%s','%s')";
-            sql = String.format(sql, book.getTitle(), book.getAuthor(), book.getPublishYear(), book.getAmount());
-
-            Statement statement = connection.createStatement();
-            return statement.executeUpdate(sql);
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return 0;
-    }*/
     public List<BookEntity> bookList() {
-        StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-        SessionFactory factory = meta.getSessionFactoryBuilder().build();
-
-        Session session = factory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         List<BookEntity> bookDtoList = session.createQuery("from BookEntity", BookEntity.class).getResultList();
         transaction.commit();
 
         session.close();
-        factory.close();
+        sessionFactory.close();
         return bookDtoList;
     }
 
@@ -99,17 +69,13 @@ public class BookRepository {
         return result;
     }*/
     public BookEntity getBookById(Integer id) {
-        StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-        SessionFactory factory = meta.getSessionFactoryBuilder().build();
-
-        Session session = factory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         BookEntity roomList = session.createQuery("from BookEntity where id = " + id + "", BookEntity.class).getSingleResult();
         transaction.commit();
 
         session.close();
-        factory.close();
+        session.close();
         return roomList;
     }
     /*public int deleteBook(Integer id) {
@@ -125,32 +91,24 @@ public class BookRepository {
         return 0;
     }*/
     public int deleteBook(Integer id) {
-        StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-        SessionFactory factory = meta.getSessionFactoryBuilder().build();
-
-        Session session = factory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        List<BookEntity> roomList = session.createQuery("delete from  BookEntity where id = " + id + "", BookEntity.class).getResultList();
+        List<BookEntity> bookEntityList = session.createQuery("delete from  BookEntity where id = " + id + "", BookEntity.class).getResultList();
         transaction.commit();
 
         session.close();
-        factory.close();
+        sessionFactory.close();
         return 1;
     }
 
     public int updateBook(Integer id) {
-        StandardServiceRegistry ssr = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        Metadata meta = new MetadataSources(ssr).getMetadataBuilder().build();
-        SessionFactory factory = meta.getSessionFactoryBuilder().build();
-
-        Session session = factory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.update(id);
         transaction.commit();
 
         session.close();
-        factory.close();
+        sessionFactory.close();
         return 1;
     }
 }
