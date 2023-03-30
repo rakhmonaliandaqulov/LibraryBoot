@@ -1,88 +1,71 @@
 package com.example.controller;
 
-import org.example.dto.Student;
-import org.example.repository.StudentRepository;
-import org.example.service.BookService;
-import org.example.service.StudentsBookService;
-import org.example.util.ScannerUtil;
+import com.example.dto.StudentDTO;
+import com.example.service.CommandLineRunnerImpl;
+import com.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-@Controller
+@RestController
+@RequestMapping(value = "/student")
 public class StudentController {
     @Autowired
-    private BookService bookService;
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private StudentsBookService studentsBookService;
-    public void start(Student student) {
-        boolean b = true;
-        while (b) {
-            showMenu();
-            switch (ScannerUtil.getAction()) {
-                case 1 -> bookList();
-                case 2 -> takeBook(student);
-                case 3 -> takenBook();
-                case 4 -> returnBook();
-                case 5 -> returnBookList();
-                case 6 -> historyLibrary();
-                case 7 -> orderBook();
-                case 0 -> b = false;
-                default -> {
-                    System.out.println("Are you mazgi? Write correctly!");
-                    showMenu();
-                }
+    private StudentService studentService;
+    private List<StudentDTO> studentList = new LinkedList<>();
+
+    public StudentController() {
+        StudentDTO s1 = new StudentDTO();
+        s1.setId(1);
+        s1.setName("Alish");
+        s1.setSurname("Aliyev");
+
+        studentList.add(s1);
+    }
+
+    @GetMapping("/list")
+    public List<StudentDTO> getAll() {
+        return studentList;
+    }
+
+    @GetMapping(value = "/get/{id}")
+    public StudentDTO getById(@PathVariable("id") String id) {
+        Optional<StudentDTO> optional = studentList.stream().filter(studentDTO -> studentDTO.getId().equals(id)).findAny();
+        return optional.orElse(null);
+    }
+
+    @PostMapping(value = "/create")
+    public StudentDTO create(@RequestBody StudentDTO studentDTO) {
+        return studentService.crate(studentDTO);
+    }
+
+    @PostMapping(value = "/create/all")
+    public Boolean createAll(@RequestBody List<StudentDTO> list) {
+        for (StudentDTO dto : list) {
+            dto.setId(1);
+            studentList.add(dto);
+        }
+        return true;
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public Boolean update(@PathVariable("id") String id, @RequestBody StudentDTO studentDTO) {
+        for (StudentDTO dto : studentList) {
+            if (dto.getId().equals(id)) {
+                dto.setName(studentDTO.getName());
+                dto.setSurname(studentDTO.getSurname());
+                return true;
             }
         }
+        return false;
     }
 
-    private void returnBook() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter book id: ");
-        Integer bookId = scanner.nextInt();
-
-        studentsBookService.returnBook(bookId);
-    }
-    private void orderBook() {
-    }
-    private void historyLibrary() {
-        studentsBookService.userHistoryLibrary();
-    }
-    private void returnBookList() {
-        studentsBookService.userReturnedBookList();
-    }
-    private void takenBook() {
-      studentsBookService.userTakenBook();
-    }
-    private void takeBook(Student student1) {
-        Student student = studentRepository.getStudentById(student1.getId());
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter book id: ");
-        Integer id = scanner.nextInt();
-
-        System.out.print("Enter duration (necha kun?): ");
-        Integer duration = scanner.nextInt();
-
-        studentsBookService.takeBook(id, duration, student);
-    }
-    private void bookList() {
-        bookService.bookList();
-    }
-    public void showMenu() {
-        System.out.println("<<<WELCOME TO USER MENU!>>>");
-        System.out.println("*** USER MENU ***");
-        System.out.println("1. Book list (Kitoblar)");
-        System.out.println("2. Take book (Kitob olish)");
-        System.out.println("3. Taken book (Olib qaytarilmagan kitoblar)");
-        System.out.println("-------------------------------------------------");
-        System.out.println("4. Return Book (Kitobni qayatrish)");
-        System.out.println("5. Return book list (Qaytarilgan kitoblar)");
-        System.out.println("6. History library (Kutubxona tarixi)");
-        System.out.println("--------------------------------------------------");
-        System.out.println("7. Oder book (Kutubxonchi yoq kitobni olib kel deb buyurishi)");
-        System.out.println("0. Log Out");
+    @DeleteMapping(value = "/delete/{id}")
+    public Boolean delete(@PathVariable("id") String id) {
+        return studentList.removeIf(studentDTO -> studentDTO.getId().equals(id));
     }
 }
