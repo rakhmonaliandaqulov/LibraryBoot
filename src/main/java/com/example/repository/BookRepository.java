@@ -68,7 +68,7 @@ public class BookRepository {
         }
         return result;
     }*/
-    public BookEntity getBookById(Integer id) {
+    public BookEntity getBookById(String id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         BookEntity roomList = session.createQuery("from BookEntity where id = " + id + "", BookEntity.class).getSingleResult();
@@ -90,7 +90,7 @@ public class BookRepository {
         }
         return 0;
     }*/
-    public int deleteBook(Integer id) {
+    public int deleteBook(String id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         List<BookEntity> bookEntityList = session.createQuery("delete from  BookEntity where id = " + id + "", BookEntity.class).getResultList();

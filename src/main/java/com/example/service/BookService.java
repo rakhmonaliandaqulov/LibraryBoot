@@ -10,12 +10,11 @@ import java.util.List;
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
-    public void addBook(String title, String author, String publish_year, Integer amount) {
-        BookEntity book = new BookEntity();
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setPublishYear(publish_year);
-        book.setAmount(amount);
+    public void addBook(BookEntity book) {
+        book.setTitle(book.getTitle());
+        book.setAuthor(book.getAuthor());
+        book.setPublishYear(book.getPublishYear());
+        book.setAmount(book.getAmount());
 
         int n = bookRepository.save(book);
         if (n != 0) {
@@ -24,7 +23,7 @@ public class BookService {
         }else System.out.println("Error.");
     }
 
-    public void bookList() {
+    public List<BookEntity> bookList() {
         List<BookEntity> bookList = bookRepository.bookList();
         if (bookList == null) {
             System.out.println("\n No book yet.");
@@ -32,18 +31,20 @@ public class BookService {
         for (BookEntity book : bookList) {
             System.out.println(book);
         }
+        return bookList;
     }
 
-    public void deleteBook(int bookId) {
+    public Boolean deleteBook(String bookId) {
         BookEntity book = bookRepository.getBookById(bookId);
         if (book == null) {
             System.out.println("\n Not found book.");
-            return;
+            return null;
         }
         int n = bookRepository.deleteBook(bookId);
         if (n != 0) {
             System.out.println("\n Deleted book");
         }
 
+        return null;
     }
 }

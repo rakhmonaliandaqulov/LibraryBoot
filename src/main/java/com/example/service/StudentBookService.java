@@ -1,8 +1,5 @@
 package com.example.service;
 
-import com.example.dto.BookDto;
-import com.example.dto.StudentBookDto;
-import com.example.dto.StudentDTO;
 import com.example.entity.BookEntity;
 import com.example.entity.StudentBookEntity;
 import com.example.entity.StudentEntity;
@@ -20,7 +17,7 @@ public class StudentBookService {
     private StudentBookRepository studentsBookRepository;
     @Autowired
     private BookRepository bookRepository;
-    public void takeBook(Integer id, Integer duration, StudentEntity student) {
+    public void takeBook(String  id, Integer duration, StudentEntity student) {
         int count = studentsBookRepository.getStudentsBookById(id).size();
         BookEntity book = bookRepository.getBookById(id);
         if (book == null){
@@ -36,12 +33,12 @@ public class StudentBookService {
         LocalDateTime localDateTime = LocalDateTime.now();
         studentBook.setReturnedDate(localDateTime);
         studentBook.setDuration(duration);
-        studentBook.setBookId(book.getId());
+        studentBook.setBookId(book.getAmount());
         studentBook.setStudentId(student.getId());
 
         studentsBookRepository.save(studentBook);
         book.setAmount(book.getAmount() - 1);
-        bookRepository.updateBook(book.getId());
+        //bookRepository.updateBook(book.getId());
 
         System.out.println("You taken book.");
     }

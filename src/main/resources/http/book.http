@@ -1,0 +1,15 @@
+### Student list
+GET localhost:8080/book/list
+
+### Book create
+POST localhost:8080/book/create
+Content-Type: application/json
+
+{
+  "title": "Jimjitlik",
+  "author": "S.Ahmad",
+  "amount": "7",
+  "publishyear": "2003",
+  "visible": "true"
+
+}

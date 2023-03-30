@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
     private String title;
     private String author;
     private String publishYear;

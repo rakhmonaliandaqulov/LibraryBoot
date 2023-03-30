@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.StudentDTO;
+import com.example.entity.StudentEntity;
 import com.example.service.CommandLineRunnerImpl;
 import com.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,10 @@ import java.util.UUID;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-    private List<StudentDTO> studentList = new LinkedList<>();
+    private List<StudentEntity> studentList = new LinkedList<>();
 
     public StudentController() {
-        StudentDTO s1 = new StudentDTO();
+        StudentEntity s1 = new StudentEntity();
         s1.setId(1);
         s1.setName("Alish");
         s1.setSurname("Aliyev");
@@ -28,24 +28,24 @@ public class StudentController {
     }
 
     @GetMapping("/list")
-    public List<StudentDTO> getAll() {
+    public List<StudentEntity> getAll() {
         return studentList;
     }
 
     @GetMapping(value = "/get/{id}")
-    public StudentDTO getById(@PathVariable("id") String id) {
-        Optional<StudentDTO> optional = studentList.stream().filter(studentDTO -> studentDTO.getId().equals(id)).findAny();
+    public StudentEntity getById(@PathVariable("id") String id) {
+        Optional<StudentEntity> optional = studentList.stream().filter(studentDTO -> studentDTO.getId().equals(id)).findAny();
         return optional.orElse(null);
     }
 
     @PostMapping(value = "/create")
-    public StudentDTO create(@RequestBody StudentDTO studentDTO) {
-        return studentService.crate(studentDTO);
+    public StudentEntity create(@RequestBody StudentEntity studentEntity) {
+        return null;//studentService.addStudent(studentEntity);
     }
 
     @PostMapping(value = "/create/all")
-    public Boolean createAll(@RequestBody List<StudentDTO> list) {
-        for (StudentDTO dto : list) {
+    public Boolean createAll(@RequestBody List<StudentEntity> list) {
+        for (StudentEntity dto : list) {
             dto.setId(1);
             studentList.add(dto);
         }
@@ -53,8 +53,8 @@ public class StudentController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public Boolean update(@PathVariable("id") String id, @RequestBody StudentDTO studentDTO) {
-        for (StudentDTO dto : studentList) {
+    public Boolean update(@PathVariable("id") String id, @RequestBody StudentEntity studentDTO) {
+        for (StudentEntity dto : studentList) {
             if (dto.getId().equals(id)) {
                 dto.setName(studentDTO.getName());
                 dto.setSurname(studentDTO.getSurname());

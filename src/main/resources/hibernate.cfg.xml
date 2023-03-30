@@ -11,8 +11,9 @@
     <property name="show_sql">true</property>
 
     <!-- MAPPINGS -->
-    <mapping class="com.example.entity.StudentEntity1"/>
+    <mapping class="com.example.entity.StudentEntity"/>
     <mapping class="com.example.entity.BookEntity"/>
+    <mapping class="com.example.entity.StudentBookEntity"/>
 
 </session-factory>
 </hibernate-configuration>

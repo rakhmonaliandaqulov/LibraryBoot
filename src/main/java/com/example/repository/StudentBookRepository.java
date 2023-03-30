@@ -25,7 +25,7 @@ public class StudentBookRepository {
         sessionFactory.close();
         return 1;
     }
-    public List<StudentBookEntity> getStudentsBookById(Integer id) {
+    public List<StudentBookEntity> getStudentsBookById(String id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         List<StudentBookEntity> studentBookEntityList = session.createQuery("from StudentBookEntity", StudentBookEntity.class).getResultList();
