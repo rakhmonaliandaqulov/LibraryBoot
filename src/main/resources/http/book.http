@@ -1,4 +1,4 @@
-### Student list
+### Book list
 GET localhost:8080/book/list
 
 ### Book create
@@ -13,3 +13,5 @@ Content-Type: application/json
   "visible": "true"
 
 }
+### Book delete
+DELETE localhost:8080/student/delete/529a9e08-e2c3-4d56-a1d6-c26aa341f805

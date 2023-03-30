@@ -1,13 +1,11 @@
 package com.example.service;
 
 import com.example.entity.StudentEntity;
-import com.example.enums.GeneralStatus;
 import com.example.repository.StudentBookRepository;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,29 +14,28 @@ public class StudentService {
     private StudentRepository studentRepository;
     @Autowired
     private StudentBookRepository studentBookRepository;
-    public void addStudent(String name, String surname, String phone, String birthDate) {
-        StudentEntity exists = studentRepository.getStudentByPhone(phone);
+    public StudentEntity addStudent(StudentEntity student) {
+        /*StudentEntity exists = studentRepository.getStudentByPhone(phone);
         if (exists != null) {
             System.out.println("\n Student phone exists.");
-        }
-
-        StudentEntity student = new StudentEntity();
-        student.setName(name);
-        student.setSurname(surname);
-        student.setPhone(phone);
-        student.setBirthDate(LocalDate.parse(birthDate));
-        student.setStatus(GeneralStatus.STUDENT);
+        }*/
+        student.setName(student.getName());
+        student.setSurname(student.getSurname());
+        student.setPhone(student.getPhone());
+        student.setBirthDate(student.getBirthDate());
+        student.setStatus(student.getStatus());
 
         int n = studentRepository.save(student);
 
         if (n != 0) {
             System.out.println("\n Student added successfully");
-            return;
+            return student;
         } else {
             System.out.println("\n ERROR");
         }
+        return student;
     }
-    public void studentList() {
+    public List<StudentEntity> studentList() {
         List<StudentEntity> studentList = studentRepository.studentList();
         if (studentList == null) {
             System.out.println("\n No student yet");
@@ -46,6 +43,7 @@ public class StudentService {
         for (StudentEntity student : studentList) {
             System.out.println(student);
         }
+        return studentList;
     }
 
     public void deleteStudent(Integer id) {

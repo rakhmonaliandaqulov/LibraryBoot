@@ -29,18 +29,18 @@ public class StudentController {
 
     @GetMapping("/list")
     public List<StudentEntity> getAll() {
-        return studentList;
+        return studentService.studentList();
     }
 
     @GetMapping(value = "/get/{id}")
     public StudentEntity getById(@PathVariable("id") String id) {
-        Optional<StudentEntity> optional = studentList.stream().filter(studentDTO -> studentDTO.getId().equals(id)).findAny();
+        Optional<StudentEntity> optional = studentService.studentList().stream().filter(studentDTO -> studentDTO.getId().equals(id)).findAny();
         return optional.orElse(null);
     }
 
     @PostMapping(value = "/create")
     public StudentEntity create(@RequestBody StudentEntity studentEntity) {
-        return null;//studentService.addStudent(studentEntity);
+        return studentService.addStudent(studentEntity);
     }
 
     @PostMapping(value = "/create/all")

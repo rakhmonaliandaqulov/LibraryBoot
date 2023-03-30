@@ -54,9 +54,9 @@ public class BookController {
 
     @PostMapping(value = "/create/all")
     public Boolean createAll(@RequestBody List<BookEntity> list) {
-        for (BookEntity dto : list) {
-            dto.setId(UUID.randomUUID().toString());
-            bookEntityList.add(dto);
+        for (BookEntity book : list) {
+            book.setId(UUID.randomUUID().toString());
+            bookService.addBook(book);
         }
         return true;
     }
