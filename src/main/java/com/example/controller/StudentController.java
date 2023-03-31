@@ -1,9 +1,13 @@
 package com.example.controller;
 
 import com.example.entity.StudentEntity;
+import com.example.exp.AppBadRequestExcception;
 import com.example.service.CommandLineRunnerImpl;
 import com.example.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -39,10 +43,31 @@ public class StudentController {
     }
 
     @PostMapping(value = "/create")
-    public StudentEntity create(@RequestBody StudentEntity studentEntity) {
-        return studentService.addStudent(studentEntity);
-    }
+    public ResponseEntity<?> create(@RequestBody StudentEntity studentEntity) {
+        //return studentService.addStudent(studentEntity);
+       // return new ResponseEntity<>("test message", HttpStatus.OK);
+        //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
+//        StudentEntity respnse = studentService.addStudent(studentEntity);
+//        return new ResponseEntity<>(respnse, HttpStatus.OK);
+
+//        StudentEntity respnse = studentService.addStudent(studentEntity);
+//        return ResponseEntity.ok(respnse);
+
+//        StudentEntity respnse = studentService.addStudent(studentEntity);
+//        return ResponseEntity.ok().body(respnse);
+
+        //return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        //return ResponseEntity.badRequest().build();
+        try {
+            StudentEntity response = studentService.addStudent(studentEntity);
+            return ResponseEntity.ok(response);
+        }catch (AppBadRequestExcception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
     @PostMapping(value = "/create/all")
     public Boolean createAll(@RequestBody List<StudentEntity> list) {
         for (StudentEntity dto : list) {
@@ -66,6 +91,6 @@ public class StudentController {
 
     @DeleteMapping(value = "/delete/{id}")
     public Boolean delete(@PathVariable("id") String id) {
-        return studentList.removeIf(studentDTO -> studentDTO.getId().equals(id));
+        return studentService.studentList().removeIf(studentDTO -> studentDTO.getId().equals(id));
     }
 }

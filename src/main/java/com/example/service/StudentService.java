@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.entity.StudentEntity;
+import com.example.entity.StudentEntity1;
+import com.example.exp.AppBadRequestExcception;
 import com.example.repository.StudentBookRepository;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,19 @@ public class StudentService {
         }
         return student;
     }
+    /*public StudentEntity1 create(StudentEntity1 entity) {
+        StudentEntity1 student = new StudentEntity1();
+        entity.setName(entity.getName());
+        entity.setSurname(entity.getSurname());
+        if (entity.getName() == null || entity.getName().isBlank()) {
+            throw new AppBadRequestExcception("Where is name?");
+        }
+        if (entity.getSurname() == null || entity.getSurname().isBlank()) {
+            throw new AppBadRequestExcception("Where is surname?");
+        }
+        studentRepository.save(student);
+
+    }*/
     public List<StudentEntity> studentList() {
         List<StudentEntity> studentList = studentRepository.studentList();
         if (studentList == null) {
